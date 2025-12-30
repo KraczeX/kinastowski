@@ -24,6 +24,8 @@ export default function Contact() {
                   width={600}
                   height={200}
                   className="w-full h-auto max-w-full object-contain"
+                  loading="lazy"
+                  quality={85}
                 />
               </div>
             </div>

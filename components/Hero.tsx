@@ -63,6 +63,7 @@ export default function Hero() {
                   fill
                   className="object-cover grayscale hover:grayscale-0 transition-all duration-700 rounded-xl"
                   priority
+                  quality={90}
                   onError={() => setImageError(true)}
                 />
               </>

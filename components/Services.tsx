@@ -126,8 +126,7 @@ export default function Services() {
                 key={index}
                 className="service-card opacity-0 translate-y-8 bg-black border-2 border-white p-6 sm:p-8 md:p-10 rounded-xl group cursor-pointer relative overflow-hidden"
                 style={{ 
-                  transitionDelay: `${index * 100}ms`,
-                  willChange: 'background-color, color'
+                  transitionDelay: `${index * 100}ms`
                 }}
               >
                 {/* Background overlay for hover effect */}
@@ -136,19 +135,19 @@ export default function Services() {
                 {/* Content */}
                 <div className="relative z-10">
                   {/* Icon */}
-                  <div className="mb-4 sm:mb-6 text-white group-hover:text-black transition-colors duration-200 ease-out" style={{ willChange: 'color' }}>
-                    <div className="group-hover:scale-110 group-hover:rotate-6 transition-transform duration-200 ease-out inline-block" style={{ willChange: 'transform' }}>
+                  <div className="mb-4 sm:mb-6 text-white group-hover:text-black transition-colors duration-200 ease-out">
+                    <div className="group-hover:scale-110 group-hover:rotate-6 transition-transform duration-200 ease-out inline-block">
                       <IconComponent />
                     </div>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white group-hover:text-black mb-4 sm:mb-5 transition-colors duration-200 ease-out" style={{ willChange: 'color' }}>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white group-hover:text-black mb-4 sm:mb-5 transition-colors duration-200 ease-out">
                     {service.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-white/90 group-hover:text-black/90 transition-colors duration-200 ease-out text-sm sm:text-base leading-relaxed" style={{ willChange: 'color' }}>
+                  <p className="text-white/90 group-hover:text-black/90 transition-colors duration-200 ease-out text-sm sm:text-base leading-relaxed">
                     {service.description}
                   </p>
                 </div>

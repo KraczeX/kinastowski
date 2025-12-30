@@ -88,7 +88,7 @@ export default function About() {
               </div>
               <div className="bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 lg:p-8 text-center hover:bg-white/20 transition-all duration-300 flex flex-col items-center justify-center min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px]">
                 <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-2 sm:mb-3 md:mb-4 leading-none">
-                  5000+
+                  1000+
                 </div>
                 <div className="text-[10px] sm:text-xs md:text-sm lg:text-base text-white/90 leading-tight whitespace-nowrap">
                   Zadowolonych Klientów
@@ -96,7 +96,7 @@ export default function About() {
               </div>
               <div className="bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 lg:p-8 text-center hover:bg-white/20 transition-all duration-300 flex flex-col items-center justify-center min-h-[120px] sm:min-h-[140px] md:min-h-[160px] lg:min-h-[180px]">
                 <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-2 sm:mb-3 md:mb-4 leading-none">
-                  6000+
+                  2000+
                 </div>
                 <div className="text-[10px] sm:text-xs md:text-sm lg:text-base text-white/90 leading-tight whitespace-nowrap">
                   Wykonanych Usług
@@ -169,4 +169,5 @@ export default function About() {
     </section>
   );
 }
+
 

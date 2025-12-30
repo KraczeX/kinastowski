@@ -201,6 +201,8 @@ export default function Felgi() {
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  loading={index < 6 ? undefined : "lazy"}
+                  quality={85}
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
               </div>
@@ -272,7 +274,7 @@ export default function Felgi() {
                   fill
                   className="object-contain"
                   sizes="100vw"
-                  priority
+                  quality={90}
                 />
               </div>
             </div>

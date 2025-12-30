@@ -100,6 +100,8 @@ export default function Gallery() {
                 fill
                 className="object-cover transition-all duration-500"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                loading={index < 6 ? undefined : "lazy"}
+                quality={85}
               />
             </div>
           ))}
@@ -157,7 +159,7 @@ export default function Gallery() {
                     fill
                     className="object-contain"
                     sizes="100vw"
-                    priority
+                    quality={90}
                   />
                 </div>
               </div>
