@@ -77,25 +77,25 @@ function EditProductModal({ product, isOpen, onClose, onSave, globalCommission, 
     : calculatePriceWithCustomCommission(minPrice, product.id, globalCommission, globalCommissionEnabled);
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
       <div className="bg-black border-2 border-white/20 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Edytuj produkt</h2>
+        <div className="p-4 sm:p-5 lg:p-6">
+          <div className="flex justify-between items-center mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold">Edytuj produkt</h2>
             <button
               onClick={onClose}
-              className="text-white/60 hover:text-white transition-colors"
+              className="text-white/60 hover:text-white transition-colors p-1"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h3 className="text-lg font-semibold mb-2">{product.manufacturer} {product.model}</h3>
-              <p className="text-white/60 text-sm">
+              <h3 className="text-base sm:text-lg font-semibold mb-2">{product.manufacturer} {product.model}</h3>
+              <p className="text-white/60 text-xs sm:text-sm">
                 Rozmiar: {product.size}" x {product.width} | PCD: {product.pcd} | ET: {product.et}
               </p>
             </div>
@@ -148,18 +148,18 @@ function EditProductModal({ product, isOpen, onClose, onSave, globalCommission, 
               </label>
             </div>
 
-            <div className="flex gap-4 pt-4">
-              <button
-                onClick={handleSave}
-                className="flex-1 bg-white text-black hover:bg-white/90 px-6 py-3 rounded-lg font-semibold transition-colors"
-              >
-                Zapisz
-              </button>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 sm:pt-6">
               <button
                 onClick={onClose}
-                className="flex-1 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                className="w-full sm:flex-1 bg-white/10 hover:bg-white/20 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition-colors text-sm sm:text-base"
               >
                 Anuluj
+              </button>
+              <button
+                onClick={handleSave}
+                className="w-full sm:flex-1 bg-white text-black hover:bg-white/90 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition-colors text-sm sm:text-base"
+              >
+                Zapisz
               </button>
             </div>
           </div>
@@ -374,44 +374,44 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white py-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-black text-white py-4 sm:py-8 lg:py-12 overflow-x-hidden">
+      <div className="container mx-auto px-3 sm:px-4 max-w-full">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl font-bold">Panel Administracyjny</h1>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Panel Administracyjny</h1>
             <button
               onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-semibold transition-colors text-sm sm:text-base w-full sm:w-auto"
             >
               Wyloguj
             </button>
           </div>
 
           {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
-              <h3 className="text-white/60 text-sm mb-2">Łączna liczba produktów</h3>
-              <p className="text-4xl font-bold text-white">{felgiData.length.toLocaleString()}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 lg:p-6">
+              <h3 className="text-white/60 text-xs sm:text-sm mb-1 sm:mb-2">Łączna liczba produktów</h3>
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">{felgiData.length.toLocaleString()}</p>
             </div>
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
-              <h3 className="text-white/60 text-sm mb-2">Łączna liczba wariantów</h3>
-              <p className="text-4xl font-bold text-white">
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 lg:p-6">
+              <h3 className="text-white/60 text-xs sm:text-sm mb-1 sm:mb-2">Łączna liczba wariantów</h3>
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
                 {felgiData.reduce((sum, f) => sum + f.variants.length, 0).toLocaleString()}
               </p>
             </div>
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
-              <h3 className="text-white/60 text-sm mb-2">Znaleziono produktów</h3>
-              <p className="text-4xl font-bold text-white">{filteredProducts.length.toLocaleString()}</p>
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 lg:p-6">
+              <h3 className="text-white/60 text-xs sm:text-sm mb-1 sm:mb-2">Znaleziono produktów</h3>
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">{filteredProducts.length.toLocaleString()}</p>
             </div>
           </div>
 
           {/* Commission Settings */}
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 mb-8">
-            <h2 className="text-2xl font-bold mb-6">Globalne Prowizje</h2>
+          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 lg:p-6 mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Globalne Prowizje</h2>
             <div className="space-y-4">
               <div>
-                <label className="flex items-center gap-3 mb-4">
+                <label className="flex items-center gap-3 mb-3 sm:mb-4">
                   <input
                     type="checkbox"
                     checked={commissionSettings.enabled}
@@ -423,7 +423,7 @@ export default function AdminPanel() {
                     }
                     className="w-5 h-5 rounded border-white/20 bg-white/5 text-white focus:ring-2 focus:ring-white/20"
                   />
-                  <span className="text-lg">Włącz globalną prowizję</span>
+                  <span className="text-base sm:text-lg">Włącz globalną prowizję</span>
                 </label>
               </div>
 
@@ -432,7 +432,7 @@ export default function AdminPanel() {
                   <label className="block text-sm text-white/60 mb-2">
                     Prowizja (%)
                   </label>
-                  <div className="flex gap-4 items-center">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center">
                     <input
                       type="number"
                       min="0"
@@ -445,17 +445,17 @@ export default function AdminPanel() {
                           globalCommission: parseFloat(e.target.value) || 0,
                         })
                       }
-                      className="bg-white/5 border border-white/20 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-white/40 w-32"
+                      className="bg-white/5 border border-white/20 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-white/40 w-full sm:w-32"
                     />
                     <span className="text-white/60">%</span>
                     <button
                       onClick={handleSaveCommission}
-                      className="bg-white text-black hover:bg-white/90 px-6 py-2 rounded-lg font-semibold transition-colors"
+                      className="bg-white text-black hover:bg-white/90 px-6 py-2 rounded-lg font-semibold transition-colors w-full sm:w-auto"
                     >
                       Zapisz
                     </button>
                   </div>
-                  <p className="text-sm text-white/60 mt-2">
+                  <p className="text-xs sm:text-sm text-white/60 mt-2">
                     Prowizja zostanie dodana do wszystkich cen produktów w sklepie (chyba że produkt ma customową prowizję).
                   </p>
                 </div>
@@ -464,23 +464,23 @@ export default function AdminPanel() {
           </div>
 
           {/* Products List */}
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
-            <div className="mb-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                <h2 className="text-2xl font-bold">Lista Produktów</h2>
+          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-3 sm:p-4 lg:p-6">
+            <div className="mb-4 sm:mb-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4">
+                <h2 className="text-xl sm:text-2xl font-bold">Lista Produktów</h2>
                 <div className="w-full sm:w-auto">
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Szukaj produktu..."
-                    className="bg-white/5 border border-white/20 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-white/40 w-full sm:w-80"
+                    className="bg-white/5 border border-white/20 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg focus:outline-none focus:border-white/40 w-full sm:w-80 text-sm sm:text-base"
                   />
                 </div>
               </div>
 
               {/* Filtry */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm text-white/60 mb-2">
                     Producent
@@ -561,7 +561,8 @@ export default function AdminPanel() {
               </div>
             ) : (
               <>
-              <div className="overflow-x-auto">
+              {/* Desktop Table View */}
+              <div className="hidden lg:block overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-white/10">
@@ -613,7 +614,6 @@ export default function AdminPanel() {
                       const hasCustomCommission = productSettings.customCommission !== undefined;
                       const totalStock = felga.variants.reduce((sum, v) => sum + v.stock1Day + v.stock4Days, 0);
                       const isAvailableSetting = productSettings.available !== false;
-                      // Ta sama logika co w sklepie: dostępny = ustawienie OK + stan > 0 + nie ukryty
                       const isAvailable = isAvailableSetting && totalStock > 0 && !productSettings.hidden;
                       const isHidden = productSettings.hidden === true;
 
@@ -688,6 +688,102 @@ export default function AdminPanel() {
                     })}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="lg:hidden space-y-3">
+                {paginatedProducts.map((felga) => {
+                  const minPrice = Math.min(...felga.variants.map(v => v.price));
+                  const maxPrice = Math.max(...felga.variants.map(v => v.price));
+                  
+                  const productSettings = getProductSetting(felga.id);
+                  const minPriceWithCommission = calculatePriceWithCustomCommission(
+                    minPrice,
+                    felga.id,
+                    commissionSettings.globalCommission,
+                    commissionSettings.enabled
+                  );
+                  const maxPriceWithCommission = calculatePriceWithCustomCommission(
+                    maxPrice,
+                    felga.id,
+                    commissionSettings.globalCommission,
+                    commissionSettings.enabled
+                  );
+
+                  const hasCustomCommission = productSettings.customCommission !== undefined;
+                  const totalStock = felga.variants.reduce((sum, v) => sum + v.stock1Day + v.stock4Days, 0);
+                  const isAvailableSetting = productSettings.available !== false;
+                  const isAvailable = isAvailableSetting && totalStock > 0 && !productSettings.hidden;
+                  const isHidden = productSettings.hidden === true;
+
+                  return (
+                    <div
+                      key={felga.id}
+                      className={`bg-white/5 border border-white/10 rounded-xl p-4 ${isHidden ? 'opacity-50' : ''}`}
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-white font-bold text-base mb-1 truncate">
+                            {felga.manufacturer} {felga.model}
+                          </h3>
+                          <p className="text-white/70 text-sm">
+                            {felga.size}" x {felga.width} | PCD: {felga.pcd} | ET: {felga.et}
+                          </p>
+                        </div>
+                        <div className="flex flex-col gap-1 items-end ml-2">
+                          {isAvailable ? (
+                            <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded whitespace-nowrap">
+                              Dostępny
+                            </span>
+                          ) : (
+                            <span className="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded whitespace-nowrap">
+                              Niedostępny
+                            </span>
+                          )}
+                          {isHidden && (
+                            <span className="text-xs bg-gray-500/20 text-gray-400 px-2 py-1 rounded whitespace-nowrap">
+                              Ukryty
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 mb-3 text-sm">
+                        <div>
+                          <p className="text-white/60 text-xs mb-1">Warianty</p>
+                          <p className="text-white font-semibold">{felga.variants.length}</p>
+                        </div>
+                        <div>
+                          <p className="text-white/60 text-xs mb-1">Cena min</p>
+                          <div>
+                            {hasCustomCommission && (
+                              <p className="text-xs text-yellow-400 mb-0.5">
+                                Custom: {productSettings.customCommission}%
+                              </p>
+                            )}
+                            <p className="line-through text-white/40 text-xs">{minPrice} zł</p>
+                            <p className="text-white font-semibold">{minPriceWithCommission} zł</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mb-3">
+                        <p className="text-white/60 text-xs mb-1">Cena max</p>
+                        <div>
+                          <p className="line-through text-white/40 text-xs">{maxPrice} zł</p>
+                          <p className="text-white font-semibold">{maxPriceWithCommission} zł</p>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => handleEditProduct(felga)}
+                        className="w-full bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 rounded-lg font-semibold transition-colors text-sm"
+                      >
+                        Edytuj
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Paginacja */}

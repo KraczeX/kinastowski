@@ -124,6 +124,14 @@ export default function Footer() {
               © {currentYear} Serwis Opon Kinastowski. Wszelkie prawa zastrzeżone.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/70">
+              <Link href="/regulamin" className="hover:text-white hover:opacity-80 transition-all duration-300 underline">
+                Regulamin
+              </Link>
+              <span className="hidden sm:inline">|</span>
+              <Link href="/faq" className="hover:text-white hover:opacity-80 transition-all duration-300 underline">
+                FAQ
+              </Link>
+              <span className="hidden sm:inline">|</span>
               <Link href="/privacy" className="hover:text-white hover:opacity-80 transition-all duration-300 underline">
                 Polityka prywatności
               </Link>

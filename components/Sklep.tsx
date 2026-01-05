@@ -867,6 +867,11 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
                         <div className="flex items-center justify-between mb-4">
                           <div>
                             <p className="text-2xl font-bold text-white">{produkt.cena} zł</p>
+                            {produkt.cenaBazowa && produkt.cenaBazowa < produkt.cena && (
+                              <p className="text-white/50 text-xs mt-1">
+                                Najniższa cena z ostatnich 30 dni: {produkt.cenaBazowa} zł
+                              </p>
+                            )}
                           </div>
                         </div>
                         

@@ -115,6 +115,10 @@ export default function ProduktDetails({ produktId, felgaId }: ProduktDetailsPro
   const productSettings = felgaData ? getProductSetting(felgaData.id) : {};
   const isAvailable = productSettings.available !== false;
   
+  const basePriceForDisplay = selectedVariant 
+    ? selectedVariant.price
+    : (produkt.cenaBazowa || produkt.cena);
+  
   const finalPrice = selectedVariant 
     ? calculatePriceWithCustomCommission(
         selectedVariant.price,
@@ -222,20 +226,15 @@ export default function ProduktDetails({ produktId, felgaId }: ProduktDetailsPro
             {/* Price - Compact */}
             <div className="mb-4">
               <p className="text-white/70 text-sm mb-2 font-medium">Cena</p>
-              <div className="flex items-baseline gap-3 mb-4">
-                {selectedVariant && finalPrice !== selectedVariant.price && (
-                  <span className="line-through text-white/40 text-2xl">
-                    {selectedVariant.price} zł
-                  </span>
-                )}
-                {!selectedVariant && produkt.cenaBazowa && finalPrice !== produkt.cenaBazowa && (
-                  <span className="line-through text-white/40 text-2xl">
-                    {produkt.cenaBazowa} zł
-                  </span>
-                )}
+              <div className="mb-4">
                 <span className="text-white text-4xl md:text-5xl font-black">
                   {finalPrice} zł
                 </span>
+                {basePriceForDisplay && basePriceForDisplay < finalPrice && (
+                  <p className="text-white/50 text-xs mt-2">
+                    Najniższa cena z ostatnich 30 dni: {basePriceForDisplay} zł
+                  </p>
+                )}
               </div>
 
               {/* Availability */}
@@ -465,15 +464,15 @@ export default function ProduktDetails({ produktId, felgaId }: ProduktDetailsPro
                             )}
                           </div>
                           <div className="text-left sm:text-right">
-                            <div className="flex items-baseline gap-2 mb-2 justify-start sm:justify-end">
-                              {priceWithCommission !== basePrice && (
-                                <span className="line-through text-white/40 text-sm">
-                                  {basePrice} zł
-                                </span>
-                              )}
+                            <div className="mb-2">
                               <span className="text-white font-black text-2xl">
                                 {priceWithCommission} zł
                               </span>
+                              {priceWithCommission !== basePrice && (
+                                <p className="text-white/50 text-xs mt-1">
+                                  Najniższa cena z ostatnich 30 dni: {basePrice} zł
+                                </p>
+                              )}
                             </div>
                             <div className="space-y-1">
                               <div className={`text-xs ${variant.stock1Day > 0 ? 'text-green-400' : 'text-red-400'}`}>
