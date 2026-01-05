@@ -32,32 +32,61 @@ export function getProductSetting(productId: string): ProductSettings {
   return allSettings[productId] || {};
 }
 
-export function setProductSetting(productId: string, settings: ProductSettings): void {
+export async function setProductSetting(productId: string, settings: ProductSettings): Promise<void> {
   if (typeof window === 'undefined') return;
 
   try {
+    // Najpierw zapisz do localStorage (dla szybkości)
     const allSettings = getProductSettings();
     allSettings[productId] = { ...allSettings[productId], ...settings };
     localStorage.setItem(PRODUCT_SETTINGS_STORAGE_KEY, JSON.stringify(allSettings));
     window.dispatchEvent(new Event('productSettingsChanged'));
+
+    // Potem zsynchronizuj z API (w tle)
+    try {
+      const response = await fetch('/api/settings/product', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId, settings }),
+      });
+      if (!response.ok) {
+        console.warn('Nie udało się zapisać ustawień do API, ale zapisano lokalnie');
+      }
+    } catch (error) {
+      console.warn('Błąd podczas zapisywania ustawień do API, ale zapisano lokalnie:', error);
+    }
   } catch (e) {
     console.error('Błąd podczas zapisywania ustawień produktu:', e);
   }
 }
 
-export function removeProductSetting(productId: string, key: keyof ProductSettings): void {
+export async function removeProductSetting(productId: string, key: keyof ProductSettings): Promise<void> {
   if (typeof window === 'undefined') return;
 
   try {
+    // Najpierw usuń z localStorage
     const allSettings = getProductSettings();
     if (allSettings[productId]) {
       delete allSettings[productId][key];
-      // Jeśli obiekt jest pusty, usuń go całkowicie
       if (Object.keys(allSettings[productId]).length === 0) {
         delete allSettings[productId];
       }
       localStorage.setItem(PRODUCT_SETTINGS_STORAGE_KEY, JSON.stringify(allSettings));
       window.dispatchEvent(new Event('productSettingsChanged'));
+    }
+
+    // Potem zsynchronizuj z API (w tle)
+    try {
+      const response = await fetch(`/api/settings/product/${encodeURIComponent(productId)}?key=${key}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        console.warn('Nie udało się usunąć ustawień z API, ale usunięto lokalnie');
+      }
+    } catch (error) {
+      console.warn('Błąd podczas usuwania ustawień z API, ale usunięto lokalnie:', error);
     }
   } catch (e) {
     console.error('Błąd podczas usuwania ustawień produktu:', e);
@@ -85,4 +114,23 @@ export function calculatePriceWithCustomCommission(
   return basePrice;
 }
 
-
+// Funkcja do synchronizacji z API (wywołana w komponentach przy starcie)
+export async function syncProductSettingsFromAPI(): Promise<void> {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    const response = await fetch('/api/settings/product', {
+      cache: 'no-store',
+    });
+    if (response.ok) {
+      const apiSettings = await response.json();
+      // Zapisz do localStorage (merge z istniejącymi lokalnymi zmianami)
+      const localSettings = getProductSettings();
+      const merged = { ...apiSettings, ...localSettings };
+      localStorage.setItem(PRODUCT_SETTINGS_STORAGE_KEY, JSON.stringify(merged));
+      window.dispatchEvent(new Event('productSettingsChanged'));
+    }
+  } catch (error) {
+    console.error('Błąd podczas synchronizacji ustawień z API:', error);
+  }
+}

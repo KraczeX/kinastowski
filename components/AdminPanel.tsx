@@ -209,6 +209,27 @@ export default function AdminPanel() {
 
     loadFelgiData();
 
+    // Synchronizuj ustawienia z API przy starcie
+    const syncSettings = async () => {
+      const { syncCommissionSettingsFromAPI } = await import('@/lib/commission');
+      const { syncProductSettingsFromAPI } = await import('@/lib/product-settings');
+      await Promise.all([
+        syncCommissionSettingsFromAPI(),
+        syncProductSettingsFromAPI(),
+      ]);
+      // Po synchronizacji załaduj ustawienia prowizji
+      const savedCommission = localStorage.getItem('globalCommission');
+      if (savedCommission) {
+        try {
+          const settings = JSON.parse(savedCommission);
+          setCommissionSettings(settings);
+        } catch (e) {
+          console.error('Błąd podczas ładowania ustawień prowizji:', e);
+        }
+      }
+    };
+    syncSettings();
+
     // Nasłuchuj zmian w ustawieniach produktów
     const handleProductSettingsChange = () => {
       loadFelgiData();
@@ -237,8 +258,9 @@ export default function AdminPanel() {
     router.push('/admin/login');
   };
 
-  const handleSaveCommission = () => {
-    localStorage.setItem('globalCommission', JSON.stringify(commissionSettings));
+  const handleSaveCommission = async () => {
+    const { setCommissionSettings } = await import('@/lib/commission');
+    await setCommissionSettings(commissionSettings);
     alert('Ustawienia prowizji zostały zapisane!');
   };
 
