@@ -43,6 +43,10 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
         selectedProducent: '',
         selectedTypPojazdu: '',
         selectedDostepnosc: '',
+        selectedPcd: '',
+        selectedCb: '',
+        selectedEt: '',
+        selectedWidth: '',
         priceRange: [0, 5000] as [number, number],
         priceInputs: ['', '5000'] as [string, string],
         sortBy: 'cena-asc' as SortOption,
@@ -58,6 +62,10 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
           selectedProducent: parsed.selectedProducent || '',
           selectedTypPojazdu: parsed.selectedTypPojazdu || '',
           selectedDostepnosc: parsed.selectedDostepnosc || '',
+          selectedPcd: parsed.selectedPcd || '',
+          selectedCb: parsed.selectedCb || '',
+          selectedEt: parsed.selectedEt || '',
+          selectedWidth: parsed.selectedWidth || '',
           priceRange: parsed.priceRange || [0, 5000],
           priceInputs: parsed.priceInputs || ['', '5000'],
           sortBy: parsed.sortBy || 'cena-asc',
@@ -72,6 +80,10 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
       selectedProducent: '',
       selectedTypPojazdu: '',
       selectedDostepnosc: '',
+      selectedPcd: '',
+      selectedCb: '',
+      selectedEt: '',
+      selectedWidth: '',
       priceRange: [0, 5000] as [number, number],
       priceInputs: ['', '5000'] as [string, string],
       sortBy: 'cena-asc' as SortOption,
@@ -83,6 +95,10 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
   const [selectedProducent, setSelectedProducent] = useState<string>(initialFilters.selectedProducent);
   const [selectedTypPojazdu, setSelectedTypPojazdu] = useState<string>(initialFilters.selectedTypPojazdu);
   const [selectedDostepnosc, setSelectedDostepnosc] = useState<string>(initialFilters.selectedDostepnosc);
+  const [selectedPcd, setSelectedPcd] = useState<string>(initialFilters.selectedPcd);
+  const [selectedCb, setSelectedCb] = useState<string>(initialFilters.selectedCb);
+  const [selectedEt, setSelectedEt] = useState<string>(initialFilters.selectedEt);
+  const [selectedWidth, setSelectedWidth] = useState<string>(initialFilters.selectedWidth);
   const [priceRange, setPriceRange] = useState<[number, number]>(initialFilters.priceRange);
   const [priceInputs, setPriceInputs] = useState<[string, string]>(initialFilters.priceInputs);
   const [sortBy, setSortBy] = useState<SortOption>(initialFilters.sortBy);
@@ -103,6 +119,10 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
         selectedProducent,
         selectedTypPojazdu,
         selectedDostepnosc,
+        selectedPcd,
+        selectedCb,
+        selectedEt,
+        selectedWidth,
         priceRange,
         priceInputs,
         sortBy,
@@ -111,7 +131,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
     } catch (e) {
       console.error('Błąd podczas zapisywania filtrów:', e);
     }
-  }, [selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, priceRange, priceInputs, sortBy]);
+  }, [selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, selectedPcd, selectedCb, selectedEt, selectedWidth, priceRange, priceInputs, sortBy]);
 
   // Synchronizuj ustawienia z API przy starcie
   useEffect(() => {
@@ -265,6 +285,27 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
   const srednice = Array.from(new Set(kategorieProdukty.filter(p => p.srednica).map(p => p.srednica!))).sort((a, b) => parseInt(a) - parseInt(b));
   const typyPojazdow = Array.from(new Set(kategorieProdukty.map(p => p.typPojazdu)));
 
+  // Unikalne wartości dla filtrów felg (tylko z felgiData)
+  const uniquePcds = useMemo(() => {
+    const pcds = new Set(felgiData.map(f => f.pcd));
+    return Array.from(pcds).sort();
+  }, [felgiData]);
+
+  const uniqueCbs = useMemo(() => {
+    const cbs = new Set(felgiData.map(f => f.cb));
+    return Array.from(cbs).sort((a, b) => a - b);
+  }, [felgiData]);
+
+  const uniqueEts = useMemo(() => {
+    const ets = new Set(felgiData.map(f => f.et));
+    return Array.from(ets).sort((a, b) => a - b);
+  }, [felgiData]);
+
+  const uniqueWidths = useMemo(() => {
+    const widths = new Set(felgiData.map(f => f.width));
+    return Array.from(widths).sort((a, b) => a - b);
+  }, [felgiData]);
+
   const filteredAndSortedProdukty = useMemo(() => {
     let filtered = [...kategorieProdukty].filter(p => p.cena > 0); // Wyklucz produkty z ceną 0
 
@@ -286,6 +327,23 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
       } else if (selectedDostepnosc === 'niedostepne') {
         filtered = filtered.filter(p => p.dostepnosc === false);
       }
+    }
+
+    // Filtry dla felg (tylko produkty z felgaData)
+    if (selectedPcd) {
+      filtered = filtered.filter(p => p.felgaData?.pcd === selectedPcd);
+    }
+
+    if (selectedCb) {
+      filtered = filtered.filter(p => p.felgaData?.cb === parseFloat(selectedCb));
+    }
+
+    if (selectedEt) {
+      filtered = filtered.filter(p => p.felgaData?.et === parseFloat(selectedEt));
+    }
+
+    if (selectedWidth) {
+      filtered = filtered.filter(p => p.felgaData?.width === parseFloat(selectedWidth));
     }
 
     filtered = filtered.filter(p => p.cena >= priceRange[0] && p.cena <= priceRange[1]);
@@ -310,7 +368,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
     });
 
     return filtered;
-  }, [kategorieProdukty, selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, priceRange, sortBy]);
+  }, [kategorieProdukty, selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, selectedPcd, selectedCb, selectedEt, selectedWidth, priceRange, sortBy]);
 
   // Paginacja
   const totalPages = Math.ceil(filteredAndSortedProdukty.length / productsPerPage);
@@ -321,13 +379,22 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
   // Resetuj stronę gdy zmieniają się filtry
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, priceRange, sortBy, selectedKategoria]);
+  }, [selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, selectedPcd, selectedCb, selectedEt, selectedWidth, priceRange, sortBy, selectedKategoria]);
+
+  // Przewiń do góry przy zmianie strony
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
 
   const clearFilters = () => {
     setSelectedSrednica('');
     setSelectedProducent('');
     setSelectedTypPojazdu('');
     setSelectedDostepnosc('');
+    setSelectedPcd('');
+    setSelectedCb('');
+    setSelectedEt('');
+    setSelectedWidth('');
     setPriceRange([0, 5000]);
     setPriceInputs(['', '5000']);
     setSortBy('cena-asc');
@@ -343,7 +410,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
   };
 
   const maxPrice = selectedKategoria === 'felgi' || selectedKategoria === 'wszystkie' ? 5000 : 3000;
-  const hasActiveFilters = selectedSrednica || selectedProducent || selectedTypPojazdu || selectedDostepnosc || priceRange[0] > 0 || priceRange[1] < maxPrice;
+  const hasActiveFilters = selectedSrednica || selectedProducent || selectedTypPojazdu || selectedDostepnosc || selectedPcd || selectedCb || selectedEt || selectedWidth || priceRange[0] > 0 || priceRange[1] < maxPrice;
 
   return (
     <section className="py-8 sm:py-12 md:py-16 bg-gradient-to-b from-black via-black to-gray-900 min-h-screen">
@@ -423,7 +490,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
             Filtry
             {hasActiveFilters && (
               <span className="bg-white text-black rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
-                {[selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, priceRange[0] > 0 || priceRange[1] < 3000].filter(Boolean).length}
+                {[selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, selectedPcd, selectedCb, selectedEt, selectedWidth, priceRange[0] > 0 || priceRange[1] < maxPrice].filter(Boolean).length}
               </span>
             )}
           </button>
@@ -448,7 +515,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Modern Filters Sidebar */}
           <aside className={`w-full lg:w-72 xl:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 sticky top-24 shadow-xl shadow-black/20">
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 sticky top-24 shadow-xl shadow-black/20 max-h-[calc(100vh-8rem)] overflow-y-auto">
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
                 <h2 className="text-xl font-bold text-white">Filtry</h2>
                 {hasActiveFilters && (
@@ -461,10 +528,10 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
                 )}
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-5">
                 {producenci.length > 0 && (
                   <div>
-                    <label className="block text-white font-semibold mb-3 text-sm">Producent</label>
+                    <label className="block text-white font-semibold mb-2 text-sm">Producent</label>
                     <select
                       value={selectedProducent}
                       onChange={(e) => setSelectedProducent(e.target.value)}
@@ -482,7 +549,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
 
                 {srednice.length > 0 && (
                   <div>
-                    <label className="block text-white font-semibold mb-3 text-sm">Średnica</label>
+                    <label className="block text-white font-semibold mb-2 text-sm">Średnica</label>
                     <div className="flex flex-wrap gap-2">
                       {srednice.map((srednica) => (
                         <button
@@ -503,7 +570,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
 
                 {typyPojazdow.length > 0 && (
                   <div>
-                    <label className="block text-white font-semibold mb-3 text-sm">Typ pojazdu</label>
+                    <label className="block text-white font-semibold mb-2 text-sm">Typ pojazdu</label>
                     <select
                       value={selectedTypPojazdu}
                       onChange={(e) => setSelectedTypPojazdu(e.target.value)}
@@ -520,7 +587,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
                 )}
 
                 <div>
-                  <label className="block text-white font-semibold mb-3 text-sm">Dostępność</label>
+                  <label className="block text-white font-semibold mb-2 text-sm">Dostępność</label>
                   <select
                     value={selectedDostepnosc}
                     onChange={(e) => setSelectedDostepnosc(e.target.value)}
@@ -532,8 +599,80 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
                   </select>
                 </div>
 
+                {(selectedKategoria === 'felgi' || selectedKategoria === 'wszystkie') && uniquePcds.length > 0 && (
+                  <div>
+                    <label className="block text-white font-semibold mb-2 text-sm">Rozstaw śrub (PCD)</label>
+                    <select
+                      value={selectedPcd}
+                      onChange={(e) => setSelectedPcd(e.target.value)}
+                      className="w-full bg-white/5 backdrop-blur-sm border border-white/20 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 text-sm"
+                    >
+                      <option value="">Wszystkie</option>
+                      {uniquePcds.map((pcd) => (
+                        <option key={pcd} value={pcd}>
+                          {pcd}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {(selectedKategoria === 'felgi' || selectedKategoria === 'wszystkie') && uniqueCbs.length > 0 && (
+                  <div>
+                    <label className="block text-white font-semibold mb-2 text-sm">Otwór centrujący (CB) [mm]</label>
+                    <select
+                      value={selectedCb}
+                      onChange={(e) => setSelectedCb(e.target.value)}
+                      className="w-full bg-white/5 backdrop-blur-sm border border-white/20 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 text-sm"
+                    >
+                      <option value="">Wszystkie</option>
+                      {uniqueCbs.map((cb) => (
+                        <option key={cb} value={cb.toString()}>
+                          {cb} mm
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {(selectedKategoria === 'felgi' || selectedKategoria === 'wszystkie') && uniqueEts.length > 0 && (
+                  <div>
+                    <label className="block text-white font-semibold mb-2 text-sm">ET (Offset)</label>
+                    <select
+                      value={selectedEt}
+                      onChange={(e) => setSelectedEt(e.target.value)}
+                      className="w-full bg-white/5 backdrop-blur-sm border border-white/20 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 text-sm"
+                    >
+                      <option value="">Wszystkie</option>
+                      {uniqueEts.map((et) => (
+                        <option key={et} value={et.toString()}>
+                          ET{et}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {(selectedKategoria === 'felgi' || selectedKategoria === 'wszystkie') && uniqueWidths.length > 0 && (
+                  <div>
+                    <label className="block text-white font-semibold mb-2 text-sm">Szerokość felgi [cal]</label>
+                    <select
+                      value={selectedWidth}
+                      onChange={(e) => setSelectedWidth(e.target.value)}
+                      className="w-full bg-white/5 backdrop-blur-sm border border-white/20 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 text-sm"
+                    >
+                      <option value="">Wszystkie</option>
+                      {uniqueWidths.map((width) => (
+                        <option key={width} value={width.toString()}>
+                          {width}"
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 <div>
-                  <label className="block text-white font-semibold mb-3 text-sm">
+                  <label className="block text-white font-semibold mb-2 text-sm">
                     Cena
                   </label>
                   <div className="flex gap-2">

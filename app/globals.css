@@ -75,3 +75,20 @@ html {
 .slide-up {
   opacity: 0;
 }
+
+/* Fix dla selectów na Windows - opcje muszą mieć ciemny tekst na jasnym tle */
+select option {
+  background-color: white;
+  color: black;
+}
+
+/* Dla selectów z ciemnym tłem - główny select pozostaje biały, ale opcje są widoczne */
+select {
+  color-scheme: dark;
+}
+
+select option:checked,
+select option:focus {
+  background-color: #3b82f6;
+  color: white;
+}
