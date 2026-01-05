@@ -113,6 +113,20 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
     }
   }, [selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, priceRange, priceInputs, sortBy]);
 
+  // Synchronizuj ustawienia z API przy starcie
+  useEffect(() => {
+    const syncSettings = async () => {
+      try {
+        const { syncCommissionSettingsFromAPI } = await import('@/lib/commission');
+        await syncCommissionSettingsFromAPI();
+        setCommissionSettings(getCommissionSettings());
+      } catch (error) {
+        console.error('Błąd podczas synchronizacji ustawień:', error);
+      }
+    };
+    syncSettings();
+  }, []);
+
   // Nasłuchuj zmian w ustawieniach prowizji i produktów
   useEffect(() => {
     const handleStorageChange = () => {
@@ -126,6 +140,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
 
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('productSettingsChanged', handleProductSettingsChange);
+    window.addEventListener('commissionSettingsChanged', handleStorageChange);
     
     // Sprawdzaj też lokalnie (dla tej samej zakładki)
     const interval = setInterval(() => {
@@ -138,6 +153,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('productSettingsChanged', handleProductSettingsChange);
+      window.removeEventListener('commissionSettingsChanged', handleStorageChange);
       clearInterval(interval);
     };
   }, [commissionSettings]);

@@ -40,6 +40,20 @@ export default function ProduktDetails({ produktId, felgaId }: ProduktDetailsPro
     loadProduct();
   }, [produktId, felgaId]);
 
+  // Synchronizuj ustawienia z API przy starcie
+  useEffect(() => {
+    const syncSettings = async () => {
+      try {
+        const { syncCommissionSettingsFromAPI } = await import('@/lib/commission');
+        await syncCommissionSettingsFromAPI();
+        setCommissionSettings(getCommissionSettings());
+      } catch (error) {
+        console.error('Błąd podczas synchronizacji ustawień:', error);
+      }
+    };
+    syncSettings();
+  }, []);
+
   // Nasłuchuj zmian w ustawieniach prowizji i produktów
   useEffect(() => {
     const handleStorageChange = () => {
@@ -52,11 +66,13 @@ export default function ProduktDetails({ produktId, felgaId }: ProduktDetailsPro
     
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('productSettingsChanged', handleProductSettingsChange);
+    window.addEventListener('commissionSettingsChanged', handleStorageChange);
     handleStorageChange();
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('productSettingsChanged', handleProductSettingsChange);
+      window.removeEventListener('commissionSettingsChanged', handleStorageChange);
     };
   }, []);
 
