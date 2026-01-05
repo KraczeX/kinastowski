@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
         hostname: '*.facebook.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'felgeo.pl',
+        pathname: '/**',
+      },
     ],
   },
   compress: true,

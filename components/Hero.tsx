@@ -32,10 +32,10 @@ export default function Hero() {
                 Skontaktuj się <span className="group-hover:translate-x-1 transition-transform duration-300">&gt;</span>
               </a>
               <a 
-                href="/gallery" 
+                href="/sklep" 
                 className="border-2 border-white text-white px-6 py-3 font-semibold hover:bg-white hover:text-black transition-all duration-300 inline-flex items-center justify-center gap-2 group rounded-lg text-sm md:text-base"
               >
-                Zobacz galerię <span className="group-hover:translate-x-1 transition-transform duration-300">&gt;</span>
+                Sklep <span className="group-hover:translate-x-1 transition-transform duration-300">&gt;</span>
               </a>
               <a 
                 href="tel:575552835" 

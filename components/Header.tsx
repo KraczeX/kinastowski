@@ -3,8 +3,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
+  const pathname = usePathname();
+  const isSklepPage = pathname?.startsWith('/sklep') || false;
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -79,48 +82,90 @@ export default function Header() {
           
           {/* Linki wyśrodkowane - Desktop */}
           <nav className="hidden md:flex space-x-8 absolute left-1/2 transform -translate-x-1/2">
-            <Link 
-              href="/#home" 
-              className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
-            >
-              Strona Główna
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link 
-              href="/#about" 
-              className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
-            >
-              O nas
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link 
-              href="/#services" 
-              className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
-            >
-              Usługi
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link 
-              href="/gallery" 
-              className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
-            >
-              Galeria
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link 
-              href="/felgi" 
-              className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
-            >
-              Felgi
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link 
-              href="/#contact" 
-              className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
-            >
-              Kontakt
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
-            </Link>
+            {isSklepPage ? (
+              <>
+                <Link 
+                  href="/#home" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  Strona Główna
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link 
+                  href="/sklep" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  Sklep
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link 
+                  href="/#about" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  O nas
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link 
+                  href="/#contact" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  Kontakt
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link 
+                  href="/#home" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  Strona Główna
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link 
+                  href="/#about" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  O nas
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link 
+                  href="/#services" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  Usługi
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link 
+                  href="/gallery" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  Galeria
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link 
+                  href="/felgi" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  Felgi
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link 
+                  href="/sklep" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  Sklep
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+                <Link 
+                  href="/#contact" 
+                  className="text-white text-lg hover:opacity-80 transition-all duration-300 relative group"
+                >
+                  Kontakt
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
+                </Link>
+              </>
+            )}
           </nav>
           
           {/* Przycisk Skontaktuj się i ikona Facebooka po prawej - Desktop */}
@@ -216,48 +261,90 @@ export default function Header() {
               </button>
             </div>
             <nav className="flex flex-col space-y-6">
-              <Link 
-                href="/#home" 
-                onClick={closeMobileMenu}
-                className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
-              >
-                Strona Główna
-              </Link>
-              <Link 
-                href="/#about" 
-                onClick={closeMobileMenu}
-                className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
-              >
-                O nas
-              </Link>
-              <Link 
-                href="/#services" 
-                onClick={closeMobileMenu}
-                className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
-              >
-                Usługi
-              </Link>
-              <Link 
-                href="/gallery" 
-                onClick={closeMobileMenu}
-                className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
-              >
-                Galeria
-              </Link>
-              <Link 
-                href="/felgi" 
-                onClick={closeMobileMenu}
-                className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
-              >
-                Felgi
-              </Link>
-              <Link 
-                href="/#contact" 
-                onClick={closeMobileMenu}
-                className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
-              >
-                Kontakt
-              </Link>
+              {isSklepPage ? (
+                <>
+                  <Link 
+                    href="/#home" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    Strona Główna
+                  </Link>
+                  <Link 
+                    href="/sklep" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    Sklep
+                  </Link>
+                  <Link 
+                    href="/#about" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    O nas
+                  </Link>
+                  <Link 
+                    href="/#contact" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    Kontakt
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link 
+                    href="/#home" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    Strona Główna
+                  </Link>
+                  <Link 
+                    href="/#about" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    O nas
+                  </Link>
+                  <Link 
+                    href="/#services" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    Usługi
+                  </Link>
+                  <Link 
+                    href="/gallery" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    Galeria
+                  </Link>
+                  <Link 
+                    href="/felgi" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    Felgi
+                  </Link>
+                  <Link 
+                    href="/sklep" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    Sklep
+                  </Link>
+                  <Link 
+                    href="/#contact" 
+                    onClick={closeMobileMenu}
+                    className="text-white text-xl font-semibold hover:opacity-80 transition-opacity duration-300 py-3 border-b border-white/20"
+                  >
+                    Kontakt
+                  </Link>
+                </>
+              )}
             </nav>
             <div className="mt-8 pt-8 border-t border-white/20">
               <a 
