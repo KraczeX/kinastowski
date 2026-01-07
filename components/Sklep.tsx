@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { produkty, getProduktyByKategoria, type Produkt } from '@/lib/products';
 import { type FelgaProdukt } from '@/lib/felgi-data';
+import { type OponaProdukt, type FelgaInneProdukt } from '@/lib/inne-data';
 import { getCommissionSettings } from '@/lib/commission';
 import { calculatePriceWithCustomCommission, getProductSetting } from '@/lib/product-settings';
 
@@ -45,49 +46,67 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
         selectedDostepnosc: '',
         selectedPcd: '',
         selectedCb: '',
-        selectedEt: '',
-        selectedWidth: '',
-        priceRange: [0, 5000] as [number, number],
-        priceInputs: ['', '5000'] as [string, string],
-        sortBy: 'cena-asc' as SortOption,
-      };
-    }
-    
-    try {
-      const saved = sessionStorage.getItem('sklep-filters');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return {
-          selectedSrednica: parsed.selectedSrednica || '',
-          selectedProducent: parsed.selectedProducent || '',
-          selectedTypPojazdu: parsed.selectedTypPojazdu || '',
-          selectedDostepnosc: parsed.selectedDostepnosc || '',
-          selectedPcd: parsed.selectedPcd || '',
-          selectedCb: parsed.selectedCb || '',
-          selectedEt: parsed.selectedEt || '',
-          selectedWidth: parsed.selectedWidth || '',
-          priceRange: parsed.priceRange || [0, 5000],
-          priceInputs: parsed.priceInputs || ['', '5000'],
-          sortBy: parsed.sortBy || 'cena-asc',
-        };
-      }
-    } catch (e) {
-      console.error('Błąd podczas ładowania filtrów:', e);
-    }
-    
-    return {
-      selectedSrednica: '',
-      selectedProducent: '',
-      selectedTypPojazdu: '',
-      selectedDostepnosc: '',
-      selectedPcd: '',
-      selectedCb: '',
       selectedEt: '',
       selectedWidth: '',
+      selectedColor: '',
+      selectedSezon: '',
+      selectedIndeksNosnosci: '',
+      selectedIndeksPredkosci: '',
+      selectedKlasa: '',
+      selectedPrzeznaczenie: '',
       priceRange: [0, 5000] as [number, number],
       priceInputs: ['', '5000'] as [string, string],
       sortBy: 'cena-asc' as SortOption,
     };
+  }
+  
+  try {
+    const saved = sessionStorage.getItem('sklep-filters');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return {
+        selectedSrednica: parsed.selectedSrednica || '',
+        selectedProducent: parsed.selectedProducent || '',
+        selectedTypPojazdu: parsed.selectedTypPojazdu || '',
+        selectedDostepnosc: parsed.selectedDostepnosc || '',
+        selectedPcd: parsed.selectedPcd || '',
+        selectedCb: parsed.selectedCb || '',
+        selectedEt: parsed.selectedEt || '',
+        selectedWidth: parsed.selectedWidth || '',
+        selectedColor: parsed.selectedColor || '',
+        selectedSezon: parsed.selectedSezon || '',
+        selectedIndeksNosnosci: parsed.selectedIndeksNosnosci || '',
+        selectedIndeksPredkosci: parsed.selectedIndeksPredkosci || '',
+        selectedKlasa: parsed.selectedKlasa || '',
+        selectedPrzeznaczenie: parsed.selectedPrzeznaczenie || '',
+        priceRange: parsed.priceRange || [0, 5000],
+        priceInputs: parsed.priceInputs || ['', '5000'],
+        sortBy: parsed.sortBy || 'cena-asc',
+      };
+    }
+  } catch (e) {
+    console.error('Błąd podczas ładowania filtrów:', e);
+  }
+  
+  return {
+    selectedSrednica: '',
+    selectedProducent: '',
+    selectedTypPojazdu: '',
+    selectedDostepnosc: '',
+    selectedPcd: '',
+    selectedCb: '',
+    selectedEt: '',
+    selectedWidth: '',
+    selectedColor: '',
+    selectedSezon: '',
+    selectedIndeksNosnosci: '',
+    selectedIndeksPredkosci: '',
+    selectedKlasa: '',
+    selectedPrzeznaczenie: '',
+    priceRange: [0, 5000] as [number, number],
+    priceInputs: ['', '5000'] as [string, string],
+    sortBy: 'cena-asc' as SortOption,
+  };
   };
 
   const initialFilters = loadFiltersFromStorage();
@@ -99,12 +118,21 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
   const [selectedCb, setSelectedCb] = useState<string>(initialFilters.selectedCb);
   const [selectedEt, setSelectedEt] = useState<string>(initialFilters.selectedEt);
   const [selectedWidth, setSelectedWidth] = useState<string>(initialFilters.selectedWidth);
+  const [selectedColor, setSelectedColor] = useState<string>(initialFilters.selectedColor);
+  const [selectedSezon, setSelectedSezon] = useState<string>(initialFilters.selectedSezon);
+  const [selectedIndeksNosnosci, setSelectedIndeksNosnosci] = useState<string>(initialFilters.selectedIndeksNosnosci);
+  const [selectedIndeksPredkosci, setSelectedIndeksPredkosci] = useState<string>(initialFilters.selectedIndeksPredkosci);
+  const [selectedKlasa, setSelectedKlasa] = useState<string>(initialFilters.selectedKlasa);
+  const [selectedPrzeznaczenie, setSelectedPrzeznaczenie] = useState<string>(initialFilters.selectedPrzeznaczenie);
   const [priceRange, setPriceRange] = useState<[number, number]>(initialFilters.priceRange);
   const [priceInputs, setPriceInputs] = useState<[string, string]>(initialFilters.priceInputs);
   const [sortBy, setSortBy] = useState<SortOption>(initialFilters.sortBy);
   const [showFilters, setShowFilters] = useState(false);
   const [felgiData, setFelgiData] = useState<FelgaProdukt[]>([]);
+  const [oponyData, setOponyData] = useState<OponaProdukt[]>([]);
+  const [felgiInneData, setFelgiInneData] = useState<FelgaInneProdukt[]>([]);
   const [loadingFelgi, setLoadingFelgi] = useState(false);
+  const [loadingInne, setLoadingInne] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [commissionSettings, setCommissionSettings] = useState(getCommissionSettings());
   const productsPerPage = 24; // Liczba produktów na stronę
@@ -123,6 +151,12 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
         selectedCb,
         selectedEt,
         selectedWidth,
+        selectedColor,
+        selectedSezon,
+        selectedIndeksNosnosci,
+        selectedIndeksPredkosci,
+        selectedKlasa,
+        selectedPrzeznaczenie,
         priceRange,
         priceInputs,
         sortBy,
@@ -131,7 +165,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
     } catch (e) {
       console.error('Błąd podczas zapisywania filtrów:', e);
     }
-  }, [selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, selectedPcd, selectedCb, selectedEt, selectedWidth, priceRange, priceInputs, sortBy]);
+  }, [selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, selectedPcd, selectedCb, selectedEt, selectedWidth, selectedColor, selectedSezon, selectedIndeksNosnosci, selectedIndeksPredkosci, selectedKlasa, selectedPrzeznaczenie, priceRange, priceInputs, sortBy]);
 
   // Synchronizuj ustawienia z API przy starcie
   useEffect(() => {
@@ -196,6 +230,26 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
     }
   }, [selectedKategoria]);
 
+  // Załaduj dane z inne.csv (opony i felgi)
+  useEffect(() => {
+    if (selectedKategoria === 'opony' || selectedKategoria === 'felgi' || selectedKategoria === 'wszystkie') {
+      setLoadingInne(true);
+      fetch('/api/inne')
+        .then(res => res.json())
+        .then(data => {
+          setOponyData(Array.isArray(data.opony) ? data.opony : []);
+          setFelgiInneData(Array.isArray(data.felgi) ? data.felgi : []);
+          setLoadingInne(false);
+        })
+        .catch(err => {
+          console.error('Błąd podczas ładowania danych z inne.csv:', err);
+          setOponyData([]);
+          setFelgiInneData([]);
+          setLoadingInne(false);
+        });
+    }
+  }, [selectedKategoria]);
+
   // Konwertuj FelgaProdukt na format Produkt dla kompatybilności
   const felgiAsProdukty: Produkt[] = useMemo(() => {
     const settings = getCommissionSettings();
@@ -216,6 +270,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
         const cheapestVariant = felga.variants.reduce((prev, curr) => 
           prev.price < curr.price ? prev : curr
         );
+        // Sprawdzamy ogólną dostępność - suma wszystkich wariantów
         const totalStock = felga.variants.reduce((sum, v) => sum + v.stock1Day + v.stock4Days, 0);
         const basePrice = cheapestVariant.price;
         const priceWithCommission = calculatePriceWithCustomCommission(
@@ -242,7 +297,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
           cenaBazowa: basePrice,
           obrazek: cheapestVariant.photo || '/felgi.jpg',
           typPojazdu: 'Osobowe',
-          dostepnosc: isAvailable && totalStock > 0,
+          dostepnosc: isAvailable && totalStock > 0, // Sprawdzamy ogólną dostępność
           opis: felga.modelName,
           parametry: {
             'CB': felga.cb.toString(),
@@ -254,6 +309,117 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
       });
   }, [felgiData, commissionSettings]);
 
+  // Konwertuj opony z inne.csv na format Produkt
+  const oponyAsProdukty: Produkt[] = useMemo(() => {
+    const settings = getCommissionSettings();
+    return oponyData
+      .filter(opona => {
+        // Filtruj opony z ceną 0 lub ilością 0
+        return opona.cenaBrutto > 0 && opona.ilosc > 0;
+      })
+      .map((opona, index) => {
+        const priceWithCommission = calculatePriceWithCustomCommission(
+          opona.cenaBrutto,
+          opona.id,
+          settings.globalCommission,
+          settings.enabled
+        );
+        
+        return {
+          id: 2000000 + index,
+          name: opona.nazwa,
+          producent: opona.producent,
+          kategoria: 'opony' as const,
+          rozmiar: `${opona.szerokosc}/${opona.profil} ${opona.srednica}`,
+          szerokosc: opona.szerokosc.toString(),
+          srednica: opona.srednica.replace('R', ''),
+          cena: priceWithCommission,
+          cenaBazowa: opona.cenaBrutto,
+          obrazek: '/felgi.jpg', // Domyślne zdjęcie
+          typPojazdu: opona.przeznaczenie || 'Osobowe',
+          dostepnosc: opona.ilosc > 0, // Sprawdzamy ogólną ilość
+          opis: opona.model,
+          parametry: {
+            'Sezon': opona.sezon,
+            'Indeks nośności': opona.indeksNosnosci,
+            'Indeks prędkości': opona.indeksPredkosci,
+            'Klasa': opona.klasa,
+            'Ilość': opona.ilosc.toString(),
+            ...(opona.xl && { 'XL': opona.xl }),
+            ...(opona.dot && { 'DOT': opona.dot }),
+          },
+          oponaData: opona, // Przechowujemy oryginalne dane
+        };
+      });
+  }, [oponyData, commissionSettings]);
+
+  // Konwertuj felgi z inne.csv na format Produkt
+  const felgiInneAsProdukty: Produkt[] = useMemo(() => {
+    const settings = getCommissionSettings();
+    return felgiInneData
+      .filter(felga => {
+        // Filtruj felgi z ceną 0 lub ilością 0
+        return felga.cenaBrutto > 0 && felga.ilosc > 0;
+      })
+      .map((felga, index) => {
+        const priceWithCommission = calculatePriceWithCustomCommission(
+          felga.cenaBrutto,
+          felga.id,
+          settings.globalCommission,
+          settings.enabled
+        );
+        
+        // Spróbuj znaleźć pasującą felgę w felgeo.csv i użyć jej zdjęcia
+        let obrazek = '/felgi.jpg'; // Domyślne zdjęcie
+        const srednicaNum = parseFloat(felga.srednica.replace('"', '').replace('R', ''));
+        const szerokoscNum = parseFloat(felga.szerokosc.replace('"', ''));
+        const etNum = parseFloat(felga.et.replace('ET', '').split('/')[0]);
+        
+        // Szukaj pasującej felgi w felgeo.csv
+        const matchingFelga = felgiData.find(f => {
+          const producerMatch = f.manufacturer.toLowerCase() === felga.producent.toLowerCase();
+          const sizeMatch = f.size === srednicaNum;
+          const widthMatch = f.width === szerokoscNum;
+          const pcdMatch = f.pcd === felga.rozstawSrub;
+          const etMatch = Math.abs(f.et - etNum) < 5; // Tolerancja 5mm dla ET
+          
+          return producerMatch && sizeMatch && widthMatch && pcdMatch && etMatch;
+        });
+        
+        if (matchingFelga && matchingFelga.variants.length > 0) {
+          // Użyj zdjęcia z pierwszego wariantu pasującej felgi
+          const photo = matchingFelga.variants[0].photo;
+          if (photo) {
+            obrazek = photo;
+          }
+        }
+        
+        return {
+          id: 3000000 + index,
+          name: felga.nazwa,
+          producent: felga.producent,
+          kategoria: 'felgi' as const,
+          rozmiar: `${felga.srednica}x${felga.szerokosc}`,
+          szerokosc: felga.szerokosc,
+          srednica: felga.srednica.replace('"', ''),
+          et: felga.et,
+          otworow: felga.rozstawSrub,
+          cena: priceWithCommission,
+          cenaBazowa: felga.cenaBrutto,
+          obrazek: obrazek,
+          typPojazdu: felga.przeznaczenie || 'Osobowe',
+          dostepnosc: felga.ilosc > 0, // Sprawdzamy ogólną ilość
+          opis: felga.model,
+          parametry: {
+            'Typ': felga.typ,
+            'Otwór centralny': felga.otworCentralny,
+            'Ilość': felga.ilosc.toString(),
+          },
+          felgaInneData: felga, // Przechowujemy oryginalne dane
+        };
+      });
+  }, [felgiInneData, felgiData, commissionSettings]);
+
   const kategorieProdukty = useMemo(() => {
     const settings = getCommissionSettings();
     const applyCommission = (price: number) => {
@@ -264,22 +430,24 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
     };
 
     if (selectedKategoria === 'felgi') {
-      return felgiAsProdukty;
+      return [...felgiAsProdukty, ...felgiInneAsProdukty];
+    } else if (selectedKategoria === 'opony') {
+      return oponyAsProdukty;
     } else if (selectedKategoria === 'wszystkie') {
       const otherProducts = getProduktyByKategoria('wszystkie')
-        .filter(p => p.kategoria !== 'felgi')
+        .filter(p => p.kategoria !== 'felgi' && p.kategoria !== 'opony')
         .map(p => ({
           ...p,
           cena: applyCommission(p.cena),
         }));
-      return [...felgiAsProdukty, ...otherProducts];
+      return [...felgiAsProdukty, ...felgiInneAsProdukty, ...oponyAsProdukty, ...otherProducts];
     } else {
       return getProduktyByKategoria(selectedKategoria).map(p => ({
         ...p,
         cena: applyCommission(p.cena),
       }));
     }
-  }, [selectedKategoria, felgiAsProdukty, commissionSettings]);
+  }, [selectedKategoria, felgiAsProdukty, felgiInneAsProdukty, oponyAsProdukty, commissionSettings]);
 
   const producenci = Array.from(new Set(kategorieProdukty.map(p => p.producent))).sort();
   const srednice = Array.from(new Set(kategorieProdukty.filter(p => p.srednica).map(p => p.srednica!))).sort((a, b) => parseInt(a) - parseInt(b));
@@ -305,6 +473,47 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
     const widths = new Set(felgiData.map(f => f.width));
     return Array.from(widths).sort((a, b) => a - b);
   }, [felgiData]);
+
+  // Unikalne kolory z wariantów felg
+  const uniqueColors = useMemo(() => {
+    const colors = new Set<string>();
+    felgiData.forEach(felga => {
+      felga.variants.forEach(variant => {
+        // Używamy finishing jako głównego identyfikatora koloru, jeśli jest dostępny
+        const colorName = variant.finishing || variant.colorShort;
+        if (colorName && colorName.trim()) {
+          colors.add(colorName.trim());
+        }
+      });
+    });
+    return Array.from(colors).sort();
+  }, [felgiData]);
+
+  // Unikalne wartości dla filtrów opon
+  const uniqueSezony = useMemo(() => {
+    const sezony = new Set(oponyData.map(o => o.sezon));
+    return Array.from(sezony).filter(s => s).sort();
+  }, [oponyData]);
+
+  const uniqueIndeksyNosnosci = useMemo(() => {
+    const indeksy = new Set(oponyData.map(o => o.indeksNosnosci));
+    return Array.from(indeksy).filter(i => i).sort();
+  }, [oponyData]);
+
+  const uniqueIndeksyPredkosci = useMemo(() => {
+    const indeksy = new Set(oponyData.map(o => o.indeksPredkosci));
+    return Array.from(indeksy).filter(i => i).sort();
+  }, [oponyData]);
+
+  const uniqueKlasy = useMemo(() => {
+    const klasy = new Set(oponyData.map(o => o.klasa));
+    return Array.from(klasy).filter(k => k).sort();
+  }, [oponyData]);
+
+  const uniquePrzeznaczenia = useMemo(() => {
+    const przeznaczenia = new Set(oponyData.map(o => o.przeznaczenie));
+    return Array.from(przeznaczenia).filter(p => p).sort();
+  }, [oponyData]);
 
   const filteredAndSortedProdukty = useMemo(() => {
     let filtered = [...kategorieProdukty].filter(p => p.cena > 0); // Wyklucz produkty z ceną 0
@@ -346,6 +555,53 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
       filtered = filtered.filter(p => p.felgaData?.width === parseFloat(selectedWidth));
     }
 
+    // Filtr kolorów - felga jest widoczna jeśli ma wariant w wybranym kolorze
+    if (selectedColor) {
+      filtered = filtered.filter(p => {
+        if (!p.felgaData) return false;
+        return p.felgaData.variants.some(variant => {
+          const variantColor = variant.finishing || variant.colorShort;
+          return variantColor && variantColor.trim().toLowerCase() === selectedColor.toLowerCase();
+        });
+      });
+    }
+
+    // Filtry dla opon
+    if (selectedSezon) {
+      filtered = filtered.filter(p => {
+        if (p.kategoria !== 'opony' || !p.oponaData) return true;
+        return p.oponaData.sezon === selectedSezon;
+      });
+    }
+
+    if (selectedIndeksNosnosci) {
+      filtered = filtered.filter(p => {
+        if (p.kategoria !== 'opony' || !p.oponaData) return true;
+        return p.oponaData.indeksNosnosci === selectedIndeksNosnosci;
+      });
+    }
+
+    if (selectedIndeksPredkosci) {
+      filtered = filtered.filter(p => {
+        if (p.kategoria !== 'opony' || !p.oponaData) return true;
+        return p.oponaData.indeksPredkosci === selectedIndeksPredkosci;
+      });
+    }
+
+    if (selectedKlasa) {
+      filtered = filtered.filter(p => {
+        if (p.kategoria !== 'opony' || !p.oponaData) return true;
+        return p.oponaData.klasa === selectedKlasa;
+      });
+    }
+
+    if (selectedPrzeznaczenie) {
+      filtered = filtered.filter(p => {
+        if (p.kategoria !== 'opony' || !p.oponaData) return true;
+        return p.oponaData.przeznaczenie === selectedPrzeznaczenie;
+      });
+    }
+
     filtered = filtered.filter(p => p.cena >= priceRange[0] && p.cena <= priceRange[1]);
 
     filtered.sort((a, b) => {
@@ -368,7 +624,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
     });
 
     return filtered;
-  }, [kategorieProdukty, selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, selectedPcd, selectedCb, selectedEt, selectedWidth, priceRange, sortBy]);
+  }, [kategorieProdukty, selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, selectedPcd, selectedCb, selectedEt, selectedWidth, selectedColor, selectedSezon, selectedIndeksNosnosci, selectedIndeksPredkosci, selectedKlasa, selectedPrzeznaczenie, priceRange, sortBy]);
 
   // Paginacja
   const totalPages = Math.ceil(filteredAndSortedProdukty.length / productsPerPage);
@@ -379,7 +635,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
   // Resetuj stronę gdy zmieniają się filtry
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, selectedPcd, selectedCb, selectedEt, selectedWidth, priceRange, sortBy, selectedKategoria]);
+  }, [selectedSrednica, selectedProducent, selectedTypPojazdu, selectedDostepnosc, selectedPcd, selectedCb, selectedEt, selectedWidth, selectedColor, selectedSezon, selectedIndeksNosnosci, selectedIndeksPredkosci, selectedKlasa, selectedPrzeznaczenie, priceRange, sortBy, selectedKategoria]);
 
   // Przewiń do góry przy zmianie strony
   useEffect(() => {
@@ -395,6 +651,12 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
     setSelectedCb('');
     setSelectedEt('');
     setSelectedWidth('');
+    setSelectedColor('');
+    setSelectedSezon('');
+    setSelectedIndeksNosnosci('');
+    setSelectedIndeksPredkosci('');
+    setSelectedKlasa('');
+    setSelectedPrzeznaczenie('');
     setPriceRange([0, 5000]);
     setPriceInputs(['', '5000']);
     setSortBy('cena-asc');
@@ -410,7 +672,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
   };
 
   const maxPrice = selectedKategoria === 'felgi' || selectedKategoria === 'wszystkie' ? 5000 : 3000;
-  const hasActiveFilters = selectedSrednica || selectedProducent || selectedTypPojazdu || selectedDostepnosc || selectedPcd || selectedCb || selectedEt || selectedWidth || priceRange[0] > 0 || priceRange[1] < maxPrice;
+  const hasActiveFilters = selectedSrednica || selectedProducent || selectedTypPojazdu || selectedDostepnosc || selectedPcd || selectedCb || selectedEt || selectedWidth || selectedColor || selectedSezon || selectedIndeksNosnosci || selectedIndeksPredkosci || selectedKlasa || selectedPrzeznaczenie || priceRange[0] > 0 || priceRange[1] < maxPrice;
 
   return (
     <section className="py-8 sm:py-12 md:py-16 bg-gradient-to-b from-black via-black to-gray-900 min-h-screen">
@@ -671,6 +933,115 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
                   </div>
                 )}
 
+                {(selectedKategoria === 'felgi' || selectedKategoria === 'wszystkie') && uniqueColors.length > 0 && (
+                  <div>
+                    <label className="block text-white font-semibold mb-2 text-sm">Kolor</label>
+                    <select
+                      value={selectedColor}
+                      onChange={(e) => setSelectedColor(e.target.value)}
+                      className="w-full bg-white/5 backdrop-blur-sm border border-white/20 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 text-sm"
+                    >
+                      <option value="">Wszystkie kolory</option>
+                      {uniqueColors.map((color) => (
+                        <option key={color} value={color}>
+                          {color}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {/* Filtry dla opon */}
+                {(selectedKategoria === 'opony' || selectedKategoria === 'wszystkie') && uniqueSezony.length > 0 && (
+                  <div>
+                    <label className="block text-white font-semibold mb-2 text-sm">Sezon</label>
+                    <select
+                      value={selectedSezon}
+                      onChange={(e) => setSelectedSezon(e.target.value)}
+                      className="w-full bg-white/5 backdrop-blur-sm border border-white/20 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 text-sm"
+                    >
+                      <option value="">Wszystkie sezony</option>
+                      {uniqueSezony.map((sezon) => (
+                        <option key={sezon} value={sezon}>
+                          {sezon}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {(selectedKategoria === 'opony' || selectedKategoria === 'wszystkie') && uniqueIndeksyNosnosci.length > 0 && (
+                  <div>
+                    <label className="block text-white font-semibold mb-2 text-sm">Indeks nośności</label>
+                    <select
+                      value={selectedIndeksNosnosci}
+                      onChange={(e) => setSelectedIndeksNosnosci(e.target.value)}
+                      className="w-full bg-white/5 backdrop-blur-sm border border-white/20 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 text-sm"
+                    >
+                      <option value="">Wszystkie</option>
+                      {uniqueIndeksyNosnosci.map((indeks) => (
+                        <option key={indeks} value={indeks}>
+                          {indeks}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {(selectedKategoria === 'opony' || selectedKategoria === 'wszystkie') && uniqueIndeksyPredkosci.length > 0 && (
+                  <div>
+                    <label className="block text-white font-semibold mb-2 text-sm">Indeks prędkości</label>
+                    <select
+                      value={selectedIndeksPredkosci}
+                      onChange={(e) => setSelectedIndeksPredkosci(e.target.value)}
+                      className="w-full bg-white/5 backdrop-blur-sm border border-white/20 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 text-sm"
+                    >
+                      <option value="">Wszystkie</option>
+                      {uniqueIndeksyPredkosci.map((indeks) => (
+                        <option key={indeks} value={indeks}>
+                          {indeks}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {(selectedKategoria === 'opony' || selectedKategoria === 'wszystkie') && uniqueKlasy.length > 0 && (
+                  <div>
+                    <label className="block text-white font-semibold mb-2 text-sm">Klasa</label>
+                    <select
+                      value={selectedKlasa}
+                      onChange={(e) => setSelectedKlasa(e.target.value)}
+                      className="w-full bg-white/5 backdrop-blur-sm border border-white/20 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 text-sm"
+                    >
+                      <option value="">Wszystkie klasy</option>
+                      {uniqueKlasy.map((klasa) => (
+                        <option key={klasa} value={klasa}>
+                          {klasa}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {(selectedKategoria === 'opony' || selectedKategoria === 'wszystkie') && uniquePrzeznaczenia.length > 0 && (
+                  <div>
+                    <label className="block text-white font-semibold mb-2 text-sm">Przeznaczenie</label>
+                    <select
+                      value={selectedPrzeznaczenie}
+                      onChange={(e) => setSelectedPrzeznaczenie(e.target.value)}
+                      className="w-full bg-white/5 backdrop-blur-sm border border-white/20 text-white px-4 py-2.5 rounded-xl focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/20 transition-all duration-300 text-sm"
+                    >
+                      <option value="">Wszystkie</option>
+                      {uniquePrzeznaczenia.map((przeznaczenie) => (
+                        <option key={przeznaczenie} value={przeznaczenie}>
+                          {przeznaczenie}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-white font-semibold mb-2 text-sm">
                     Cena
@@ -760,7 +1131,7 @@ export default function Sklep({ kategoria: kategoriaProp }: SklepProps) {
               </p>
             </div>
 
-            {loadingFelgi && (selectedKategoria === 'felgi' || selectedKategoria === 'wszystkie') ? (
+            {(loadingFelgi || loadingInne) && (selectedKategoria === 'felgi' || selectedKategoria === 'opony' || selectedKategoria === 'wszystkie') ? (
               <div className="text-center py-20">
                 <div className="inline-block p-4 bg-white/5 rounded-full mb-6 animate-pulse">
                   <svg className="w-12 h-12 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">

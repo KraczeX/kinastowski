@@ -61,3 +61,4 @@ Po wykonaniu jednej z opcji, Netlify powinien:
 2. Zrobić nowy deploy
 3. Udać się bez błędów
 
+

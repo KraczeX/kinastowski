@@ -62,3 +62,4 @@ Po wypushowaniu zmian na Netlify:
 2. Wejdź do panelu admina
 3. **Prowizja powinna być 20%** (zamiast 0%) ✅
 
+

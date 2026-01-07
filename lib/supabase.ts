@@ -19,3 +19,4 @@ export const SETTINGS_KEYS = {
   GLOBAL_COMMISSION: 'globalCommission',
 } as const;
 
+

@@ -55,3 +55,4 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=twoj-anon-key
 
 Aktualnie kod ma fallback do localStorage, więc aplikacja będzie działać, ale synchronizacja między urządzeniami nie zadziała bez bazy danych.
 
+

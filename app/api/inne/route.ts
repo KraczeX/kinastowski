@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { parseCSV } from '@/lib/felgi-data';
+import { parseInneCSV } from '@/lib/inne-data';
 
 // Cache dla danych (w pamięci serwera)
 let cachedData: any = null;
@@ -9,7 +9,7 @@ let lastModified: number = 0;
 
 export async function GET() {
   try {
-    const csvPath = path.join(process.cwd(), 'app', 'sklep', 'felgeo.csv');
+    const csvPath = path.join(process.cwd(), 'app', 'sklep', 'innecsv.csv');
     const stats = fs.statSync(csvPath);
     
     // Sprawdź czy plik został zmodyfikowany
@@ -22,7 +22,7 @@ export async function GET() {
     }
 
     const csvContent = fs.readFileSync(csvPath, 'utf-8');
-    const data = parseCSV(csvContent);
+    const data = parseInneCSV(csvContent);
     
     cachedData = data;
     lastModified = stats.mtimeMs;
@@ -33,10 +33,8 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('Błąd podczas ładowania danych felg:', error);
+    console.error('Błąd podczas ładowania danych z inne.csv:', error);
     return NextResponse.json({ error: 'Błąd podczas ładowania danych' }, { status: 500 });
   }
 }
-
-
 

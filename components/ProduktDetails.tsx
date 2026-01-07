@@ -230,11 +230,31 @@ export default function ProduktDetails({ produktId, felgaId }: ProduktDetailsPro
                 <span className="text-white text-4xl md:text-5xl font-black">
                   {finalPrice} zł
                 </span>
+                <p className="text-white/70 text-base mt-2 font-semibold">
+                  Zestaw 4 felg: {finalPrice * 4} zł
+                </p>
                 {basePriceForDisplay && basePriceForDisplay < finalPrice && (
                   <p className="text-white/50 text-xs mt-2">
-                    Najniższa cena z ostatnich 30 dni: {basePriceForDisplay} zł
+                    Najniższa cena z ostatnich 30 dni: {basePriceForDisplay} zł za sztukę ({basePriceForDisplay * 4} zł za zestaw)
                   </p>
                 )}
+              </div>
+              
+              {/* Installation Service Info - Always Visible */}
+              <div className="bg-gradient-to-r from-blue-500/30 to-purple-500/30 border-2 border-blue-500/70 rounded-xl p-5 mb-4 shadow-lg shadow-blue-500/20">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-white font-bold text-lg mb-2">Usługa kompleksowa: Kupno i Montaż</h3>
+                    <p className="text-white text-base leading-relaxed font-medium">
+                      Oferujemy profesjonalny montaż felg na naszym warsztacie. Kup zestaw 4 felg i skorzystaj z usługi montażu - wszystko w jednym miejscu!
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Availability */}
@@ -281,8 +301,11 @@ export default function ProduktDetails({ produktId, felgaId }: ProduktDetailsPro
                 </div>
               </a>
 
-              <p className="text-white/60 text-xs text-center">
+              <p className="text-white/60 text-xs text-center mb-2">
                 * Kupno na miejscu. Zadzwoń, aby sprawdzić dostępność.
+              </p>
+              <p className="text-blue-400 text-sm text-center font-semibold">
+                ✓ Oferujemy również profesjonalny montaż felg na warsztacie
               </p>
             </div>
 
@@ -468,9 +491,12 @@ export default function ProduktDetails({ produktId, felgaId }: ProduktDetailsPro
                               <span className="text-white font-black text-2xl">
                                 {priceWithCommission} zł
                               </span>
+                              <p className="text-white/70 text-sm mt-1">
+                                Zestaw 4 felg: {priceWithCommission * 4} zł
+                              </p>
                               {priceWithCommission !== basePrice && (
                                 <p className="text-white/50 text-xs mt-1">
-                                  Najniższa cena z ostatnich 30 dni: {basePrice} zł
+                                  Najniższa cena z ostatnich 30 dni: {basePrice} zł za sztukę ({basePrice * 4} zł za zestaw)
                                 </p>
                               )}
                             </div>
@@ -509,12 +535,12 @@ export default function ProduktDetails({ produktId, felgaId }: ProduktDetailsPro
             <h3 className="text-white font-bold text-sm mb-1">Szybka dostawa</h3>
             <p className="text-white/70 text-xs">Od ręki lub 4 dni</p>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 text-center">
+          <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-2 border-blue-500/50 rounded-xl p-4 text-center shadow-lg shadow-blue-500/10">
             <svg className="w-8 h-8 text-white mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
-            <h3 className="text-white font-bold text-sm mb-1">Montaż na miejscu</h3>
-            <p className="text-white/70 text-xs">Profesjonalna obsługa</p>
+            <h3 className="text-white font-bold text-sm mb-1">Kupno i Montaż</h3>
+            <p className="text-white font-semibold text-xs">Kompleksowa usługa na warsztacie</p>
           </div>
         </div>
       </div>

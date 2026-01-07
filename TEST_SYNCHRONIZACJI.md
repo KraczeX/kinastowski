@@ -99,3 +99,4 @@ fetch('/api/settings/commission')
 - Sprawdź czy build się powiódł
 - Sprawdź konsolę przeglądarki
 
+

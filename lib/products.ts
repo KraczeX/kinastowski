@@ -1,4 +1,5 @@
 import type { FelgaProdukt } from './felgi-data';
+import type { OponaProdukt, FelgaInneProdukt } from './inne-data';
 
 export interface Produkt {
   id: number;
@@ -19,6 +20,8 @@ export interface Produkt {
   parametry?: Record<string, string>;
   felgaData?: FelgaProdukt; // Dodatkowe dane dla felg z CSV
   felgaId?: string; // ID felgi z CSV do mapowania
+  oponaData?: OponaProdukt; // Dodatkowe dane dla opon z inne.csv
+  felgaInneData?: FelgaInneProdukt; // Dodatkowe dane dla felg z inne.csv
 }
 
 export const produkty: Produkt[] = [];

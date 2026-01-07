@@ -75,3 +75,4 @@ Otwórz konsolę (F12 → Console) i sprawdź czy są błędy:
 2. Zrobić retry deploy
 3. Sprawdzić czy działa
 
+
