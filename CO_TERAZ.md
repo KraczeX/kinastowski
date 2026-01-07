@@ -63,3 +63,4 @@ Po wypushowaniu zmian na Netlify:
 3. **Prowizja powinna być 20%** (zamiast 0%) ✅
 
 
+

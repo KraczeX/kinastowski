@@ -62,3 +62,4 @@ Po wykonaniu jednej z opcji, Netlify powinien:
 3. Udać się bez błędów
 
 
+

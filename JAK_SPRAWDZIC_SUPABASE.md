@@ -80,3 +80,4 @@
 **Teraz musisz tylko dodać zmienne środowiskowe w Netlify i zrobić retry deploy!**
 
 
+

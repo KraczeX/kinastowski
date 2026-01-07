@@ -76,3 +76,4 @@ Otwórz konsolę (F12 → Console) i sprawdź czy są błędy:
 3. Sprawdzić czy działa
 
 
+

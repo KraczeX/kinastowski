@@ -64,3 +64,4 @@ Po usunięciu `pnpm-lock.yaml` i pushu, Netlify powinien:
 - ✅ Build powinien przejść pomyślnie
 
 
+
